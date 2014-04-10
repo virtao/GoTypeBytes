@@ -44,7 +44,9 @@ func typeBytesTest() {
 
     buf := []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
-    fmt.Printf("IntToBytes : 0x%0x to %v\n", testInt, hex.EncodeToString(typeBytes.IntToBytes(testInt)))
+    var tmp []byte
+    tmp = typeBytes.IntToBytes(testInt)
+    fmt.Printf("IntToBytes : 0x%0x to %v, BigEndian = %v\n", testInt, hex.EncodeToString(tmp), hex.EncodeToString(typeBytes.DefaultToBigEndian(tmp)))
     fmt.Printf("Int16ToBytes : 0x%0x to %v\n", testInt16, hex.EncodeToString(typeBytes.Int16ToBytes(testInt16)))
     fmt.Printf("Int32ToBytes : 0x%0x to %v\n", testInt32, hex.EncodeToString(typeBytes.Int32ToBytes(testInt32)))
     fmt.Printf("Int64ToBytes : 0x%0x to %v\n", testInt64, hex.EncodeToString(typeBytes.Int64ToBytes(testInt64)))
@@ -52,7 +54,8 @@ func typeBytesTest() {
     fmt.Printf("Uint16ToBytes : 0x%0x to %v\n", testUint16, hex.EncodeToString(typeBytes.Uint16ToBytes(testUint16)))
     fmt.Printf("Uint32ToBytes : 0x%0x to %v\n", testUint32, hex.EncodeToString(typeBytes.Uint32ToBytes(testUint32)))
     fmt.Printf("Uint64ToBytes : 0x%0x to %v\n", testUint64, hex.EncodeToString(typeBytes.Uint64ToBytes(testUint64)))
-    fmt.Printf("Float32ToBytes : %f to %v\n", testFloat32, hex.EncodeToString(typeBytes.Float32ToBytes(testFloat32)))
+    tmp = typeBytes.Float32ToBytes(testFloat32)
+    fmt.Printf("Float32ToBytes : %f to %v, BigEndian = %v\n", testFloat32, hex.EncodeToString(tmp), hex.EncodeToString(typeBytes.DefaultToBigEndian(tmp)))
     fmt.Printf("Float64ToBytes : %f to %v\n", testFloat64, hex.EncodeToString(typeBytes.Float64ToBytes(testFloat64)))
 
     //数组长度刚好
@@ -72,7 +75,7 @@ Output:
     float64 size :  8
     int size :  8
     uint size :  8
-    IntToBytes : 0x1f123400ff123400 to 003412ff0034121f
+    IntToBytes : 0x1f123400ff123400 to 003412ff0034121f, BigEndian = 1f123400ff123400
     Int16ToBytes : 0x1f12 to 121f
     Int32ToBytes : 0x1f123400 to 0034121f
     Int64ToBytes : 0x1f123400ff123400 to 003412ff0034121f
@@ -80,7 +83,7 @@ Output:
     Uint16ToBytes : 0xff12 to 12ff
     Uint32ToBytes : 0xff123400 to 003412ff
     Uint64ToBytes : 0xff123400ff123400 to 003412ff003412ff
-    Float32ToBytes : -1234.567749 to 2b529ac4
+    Float32ToBytes : -1234.567749 to 2b529ac4, BigEndian = c49a522b
     Float64ToBytes : -1234.567800 to adfa5c6d454a93c0
     BytesToInt(8Bytes) : 030405060708090a to 0xa09080706050403
     BytesToInt(>8Bytes) : 0102030405060708090a to 0x807060504030201
