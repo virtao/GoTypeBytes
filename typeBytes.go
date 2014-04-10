@@ -6,10 +6,13 @@ import (
 )
 
 const (
-	INT_SIZE     int = int(unsafe.Sizeof(0))
-	UINT_SIZE    int = int(unsafe.Sizeof(uint(0)))
-	FLOAT32_SIZE int = 4
-	FLOAT64_SIZE int = 8
+	INT_SIZE       int = int(unsafe.Sizeof(0))
+	UINT_SIZE      int = int(unsafe.Sizeof(uint(0)))
+	FLOAT32_SIZE   int = 4
+	FLOAT64_SIZE   int = 8
+	DEFAULT_ENDIAN int = 0
+	BIG_ENDIAN     int = 1
+	LITTLE_ENDIAN  int = 2
 )
 
 func IntToBytes(n int) (ret []byte) {
@@ -127,4 +130,27 @@ func Uint64ToBytes(n uint64) (ret []byte) {
 }
 func BytesToUint64(buf []byte) (ret uint64) {
 	return endian.Endian.Uint64(buf)
+}
+
+//将字节数组前后反转，用于大小端转换
+func BytesReverse(data []byte) {
+	for i, j := 0, len(data)-1; i < j; i, j = i+1, j-1 {
+		data[i], data[j] = data[j], data[i]
+	}
+}
+
+//将默认字节序改为大端序，如果机器默认为大端序则没有变化。注意，会修改原数组的值
+func DefaultToBigEndian(data []byte) (ret []byte) {
+	if endian.IsLittleEndian() {
+		BytesReverse(data)
+	}
+	return data
+}
+
+//将默认字节序改为小端序，如果机器默认为小端序则没有变化，注意，会修改原数组的值
+func DefaultToLittleEndian(data []byte) (ret []byte) {
+	if endian.IsBigEndian() {
+		BytesReverse(data)
+	}
+	return data
 }
